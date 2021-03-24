@@ -23,7 +23,7 @@ class Cinema:
 
         seating = []
         for i in range(1, self.__rows + 1):
-                seating.append({key: None for key in range(1, self.__seats_per_row)})
+            seating.append({key: None for key in range(1, self.__seats_per_row)})
 
         self.__seating = seating
 
@@ -52,10 +52,9 @@ class Cinema:
             total: valor inicial donde se acumulará el total
         """
         for row, seat in rows_seats:
-            if self.__seating[row][seat] == None:
-                total += 1
-
-
+            if self.__seating[row].get(seat) is None:
+                total = total +1
+        return total
 # ------------------------------------------- MAIN -----------------------------------------------
 cinema = Cinema(rows=10, seats_per_row=8)
 
@@ -65,23 +64,34 @@ cinema.create_cinema_seating()
 cinema.book_seat(2, 4)
 cinema.print_seating()
 '''
-El problema que he encontraso ha sido la manera de crear el seating del cine, al principio, los objetos que se guardaban
-en las rows del seating eran tipo "str", 
+El problema que he encontrado ha sido la manera de crear el seating del cine, al principio, los objetos que se guardaban
+en las rows del seating eran tipo "str". 
 
+La solución ha sido cambiar la manera de iniciar el seating de manera que ahora actua como un diccionario
 '''
 
-'''
 # ERROR 2: le paso la lista de "seats" donde debería haber 2 libres y me dice que hay 0.
 print("\n------------- Error 2 -----------------")
 seats = [(2, 4), (3, 1), (5, 2)]
 total = 0
-cinema.count_free_seats(seats, total)
+total = cinema.count_free_seats(seats, total)
 print("total: " + str(total))
+
+''' 
+Por lo que he podido observar python crea una copia de la variable que estas pasando por parametros de manera que
+cuando la modificas en la funcion estas modificando la copia y no la variable con la direccion de memoria original.
+Esto se arregla devolviendo el total cuando has acabado con las operaciones.
+
+Otra solucion seria utilizar "global". O las mas elegante de todas (en mi opinion), utilizar las clases.
+'''
 
 # ERROR 3: quiero modificar la butaca (2,4) de la lista anterior para que sea la (3,4) y no me deja.
 print("\n------------- Error 3 -----------------")
 seats[0][1] = 3
 total = 0
-cinema.count_free_seats(seats, total)
+total = cinema.count_free_seats(seats, total)
 print("total: " + str(total))
+
+'''
+    
 '''
